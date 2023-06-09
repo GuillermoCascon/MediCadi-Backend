@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import generateId from "../helpers/generateId.js";
+import generateJWT from "../helpers/generateJWT.js";
 import forgotPasswordEmail from '../helpers/forgotPasswordEmail.js'
+import registerEmail from '../helpers/registerEmail.js'
 
 const register = async (req, res) => {
   const { email, name } = req.body;
@@ -11,10 +13,17 @@ const register = async (req, res) => {
     const error = new Error("Usuario ya registrado");
     return res.status(400).json({ msg: error.message });
   }
-
+  // saving user
   try {
     const user = new User(req.body);
     const userSaved = await user.save();
+    // email to user
+    registerEmail({
+      email,
+      name,
+      token: userSaved.token
+    })
+
     res.json(userSaved);
   } catch (error) {
     console.log(error);
@@ -42,7 +51,7 @@ const login = async (req, res) => {
       _id: user.id,
       nombre: user.name,
       email: user.email,
-      token: generarJWT(user.id),
+      token: generateJWT(user.id),
     });
   } else {
     const error = new Error("El password es incorrecto");
