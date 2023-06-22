@@ -6,7 +6,7 @@ const getMedicament = async (req, res) => {
     if(!medicament){
         return res.status(404).json({msg: 'Medicamento no encontrado'})
     }
-    if(medicament.location._id.toString() !== req.location._id.toString()){
+    if(medicament.user._id.toString() !== req.user._id.toString()){
         return res.json({msg: 'Acción no válida'})
     }
     return res.json(medicament);
@@ -14,14 +14,14 @@ const getMedicament = async (req, res) => {
 
 const getMedicaments = async (req, res) => {
     const medicaments = await Medicament.find()
-        .where('location')
-        .equals(req.location)
+        .where('user')
+        .equals(req.user)
     res.json(medicaments)
 }
 
 const addMedicament = async (req, res) => {
     const medicament = new Medicament(req.body)
-    medicament.location = req.location._id
+    medicament.user = req.user._id
     try {
         const medicamentStored = await medicament.save();
         res.json(medicamentStored);
@@ -36,7 +36,7 @@ const updateMedicament = async (req, res) => {
     if(!medicament){
         return res.status(404).json({msg: 'Medicamento no encontrado'})
     }
-    if(medicament.location._id.toString() !== req.location._id.toString()){
+    if(medicament.user._id.toString() !== req.user._id.toString()){
         return res.json({msg: 'Acción no válida'})
     }
     if(name) medicament.name = name;
@@ -56,7 +56,7 @@ const removeMedicament = async (req, res) => {
     if(!medicament){
         return res.status(404).json({msg: 'Medicamento no encontrado'})
     }
-    if(medicament.location._id.toString() !== req.location._id.toString()){
+    if(medicament.user._id.toString() !== req.user._id.toString()){
         return res.json({msg: 'Acción no válida'})
     }
     try {
