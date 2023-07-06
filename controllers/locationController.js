@@ -43,7 +43,7 @@ const updateLocation = async (req, res) => {
     if(name) location.name = name
     try {
         const updatedLocation = await location.save()
-        return res.json(updateLocation)
+        return res.json(updatedLocation)
     } catch (error) {
         console.log(error)
     }
